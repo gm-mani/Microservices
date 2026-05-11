@@ -14,3 +14,21 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  profiles:
+    active: "prod"
+  config:
+    import:
+      - "application_test.yml"
+      - "application_prod.yml"
+
+build:
+  version: 3.0
+
+accounts:
+  message: "Welcome to General Bank accounts related local APIs "
+  contactDetails:
+    name: "John Doe - Developer"
+    email: "john@bank.com"
+  onCallSupport:
+    - (555) 555-1234
+    - (555) 523-1345
