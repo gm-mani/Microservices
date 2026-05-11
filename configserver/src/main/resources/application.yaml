@@ -8,8 +8,8 @@ spring:
     config:
       server:
         # native:
-          # searchLocations: classpath:/config
-          # searchLocations: "file:///C:/Users/G M MANI/OneDrive/Desktop/SpringBoot/Udemy/Config"
+        # searchLocations: classpath:/config
+        # searchLocations: "file:///C:/Users/G M MANI/OneDrive/Desktop/SpringBoot/Udemy/Config"
         git:
           uri: https://github.com/gm-mani/config-data.git
           force-pull: true
@@ -17,6 +17,16 @@ spring:
           clone-on-start: true
           default-label: main
 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 
 server:
   port: 8071
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
