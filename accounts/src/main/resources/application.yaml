@@ -1,6 +1,10 @@
 server:
   port: 8080
 spring:
+  application:
+    name: "accounts"
+  profiles:
+    active: "test"
   datasource:
     url: jdbc:h2:mem:testdb
     driverClassName: org.h2.Driver
@@ -14,21 +18,5 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-  profiles:
-    active: "prod"
   config:
-    import:
-      - "application_test.yml"
-      - "application_prod.yml"
-
-build:
-  version: 3.0
-
-accounts:
-  message: "Welcome to General Bank accounts related local APIs "
-  contactDetails:
-    name: "John Doe - Developer"
-    email: "john@bank.com"
-  onCallSupport:
-    - (555) 555-1234
-    - (555) 523-1345
+    import: "optional:configserver:http://localhost:8071/"
