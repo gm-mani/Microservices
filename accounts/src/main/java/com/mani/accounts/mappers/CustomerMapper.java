@@ -1,6 +1,7 @@
 package com.mani.accounts.mappers;
 
 
+import com.mani.accounts.dtos.CustomerDetailsDto;
 import com.mani.accounts.dtos.CustomerDto;
 import com.mani.accounts.entity.Customer;
 import lombok.experimental.UtilityClass;
@@ -13,6 +14,13 @@ public class CustomerMapper {
         customer.setEmail(customerDto.getEmail());
         customer.setMobileNumber(customerDto.getMobileNumber());
         return customer;
+    }
+
+    public static CustomerDetailsDto toCustomerDetailsDto(Customer customer, CustomerDetailsDto customerDetailsDto) {
+        customerDetailsDto.setName(customer.getName());
+        customerDetailsDto.setEmail(customer.getEmail());
+        customerDetailsDto.setMobileNumber(customer.getMobileNumber());
+        return customerDetailsDto;
     }
 
     public static CustomerDto toCustomerDto(Customer customer) {
