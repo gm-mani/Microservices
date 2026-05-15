@@ -30,6 +30,15 @@ management:
     web:
       exposure:
         include: "*"
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    readinessstate:
+      enabled: true
+    livenessstate:
+      enabled: true
   info:
     env:
       enabled: true
@@ -47,3 +56,9 @@ info:
     name: "Accounts Microservice"
     description: "This microservice manages customer accounts and related information."
     version: "1.0.0"
+
+logging:
+  level:
+    com:
+      mani:
+        accounts: DEBUG
