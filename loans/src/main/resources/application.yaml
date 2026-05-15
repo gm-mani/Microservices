@@ -33,6 +33,14 @@ management:
   endpoint:
     shutdown:
       access: unrestricted
+    health:
+      probes:
+        enabled: true
+  health:
+    readinessstate:
+      enabled: true
+    livenessstate:
+      enabled: true
   info:
     env:
       enabled: true
@@ -51,3 +59,9 @@ info:
     name: "Loans Microservice"
     description: "This microservice manages loan-related operations, including loan applications, approvals, and repayments. It provides APIs for creating and managing loans, as well as processing loan transactions."
     version: "1.0.0"
+
+logging:
+  level:
+    com:
+      mani:
+        loans: DEBUG
