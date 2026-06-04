@@ -50,14 +50,6 @@ A fully wired, production-style microservices architecture built around a fictio
 
 ---
 
-## Currently working on
-
-- Deepening hands-on knowledge of Kubernetes — moving the above system from Docker Compose to K8s with proper config maps and health probes
-- Exploring distributed tracing with Micrometer and Zipkin
-- Consistent open-source contributions
-
----
-
 ## Get in touch
 
 I'm open to conversations about backend engineering, distributed systems, or anything Java/Spring.
