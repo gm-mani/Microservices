@@ -1,64 +1,68 @@
-## Tech stack
+# Cloud-Native Banking Microservices
 
-**Core**
-`Java 21` · `Spring Boot 4` · `Spring Cloud` · `Spring Security`
+A distributed, cloud-native backend architecture for a banking domain, built with Spring Boot and Spring Cloud. This project demonstrates production-grade patterns including service-to-service communication, asynchronous event processing, centralized configuration, and API gateway security.
 
-**Microservices & Messaging**
-`Eureka Service Discovery` · `Spring Cloud Config` · `OpenFeign` · `Apache Kafka` · `Spring Cloud Stream`
+## 🏗️ System Architecture
 
-**Resilience**
-`Resilience4j` · `Circuit Breaker` · `Retry` · `Rate Limiter`
+The ecosystem consists of infrastructure and domain-specific microservices:
 
-**API & Security**
-`Spring Cloud Gateway` · `OAuth2 / JWT` · `Keycloak` · `REST APIs` · `OpenAPI / Swagger`
-
-**Data & Persistence**
-`Spring Data JPA` · `Hibernate` · `H2` · `Redis`
-
-**DevOps & Tooling**
-`Docker` · `Docker Compose` · `JIB` · `Maven` · `Git`
-
----
-
-## Featured project
-
-### [Microservices — Banking Backend System](https://github.com/gm-mani/Microservices)
-
-A fully wired, production-style microservices architecture built around a fictional banking domain. Not a tutorial clone — this is a system designed end-to-end with the patterns you'd expect in real distributed services work.
-
-**What's inside:**
-
-| Service | What it does |
+| Service | Description |
 |---|---|
-| `accounts` | Core CRUD service — manages customers and bank accounts |
-| `loans` | Loan lifecycle management |
-| `cards` | Card issuance and details |
-| `gatewayserver` | API gateway — routes, secures, rate-limits, and traces all traffic |
-| `eurekaserver` | Service registry — all services register and discover each other here |
-| `configserver` | Centralised config with environment-specific profiles (default / test / prod) |
-| `message` | Async consumer — handles email and SMS notification events off the Kafka queue |
+| `gatewayserver` | The edge server routing all external traffic, enforcing OAuth2/JWT security, and rate-limiting. |
+| `eurekaserver` | Service registry enabling dynamic discovery and client-side load balancing. |
+| `configserver` | Centralised configuration server managing environment-specific profiles (`default`, `test`, `prod`). |
+| `accounts` | Core business service managing customer profiles and bank accounts. |
+| `loans` | Business service managing loan lifecycles. |
+| `cards` | Business service managing credit/debit card issuance. |
+| `message` | Asynchronous Kafka consumer that processes email and SMS notification events. |
 
-**How it's wired together:**
+## ⚙️ Core Technologies & Patterns
 
-- Services communicate via **OpenFeign** with **Resilience4j circuit breakers** and **fallback handlers** — if a downstream service is down, requests degrade gracefully instead of cascading
-- Account creation fires an event onto a **Kafka topic** (`send-communication`), the message service consumes it and processes email/SMS — fully async, fully decoupled
-- The gateway enforces **OAuth2 / JWT auth via Keycloak**, performs **Redis-based rate limiting**, and propagates a **correlation ID** across the entire request chain for distributed tracing
-- Retry policies, circuit breaker configs, and rate limiters are all tuned per-service in the centralised config server
-- **Three Docker Compose environments** — `default`, `test`, `prod` — with shared base configs and service health checks
-
-**Stack:** `Spring Boot 4` · `Java 21` · `Kafka` · `Resilience4j` · `Spring Cloud Gateway` · `Keycloak` · `Redis` · `Docker Compose` · `JIB`
-
----
-
-## Get in touch
-
-I'm open to conversations about backend engineering, distributed systems, or anything Java/Spring.
-
-**LinkedIn:** [linkedin.com/in/mani12](http://www.linkedin.com/in/mani12)
-**GitHub:** [github.com/gm-mani](https://github.com/gm-mani)
+*   **Framework:** Java, Spring Boot, Spring Cloud
+*   **Inter-Service Communication:** OpenFeign for synchronous REST calls; Apache Kafka for decoupled, event-driven communication (e.g., triggering notification events upon account creation).
+*   **Resiliency:** Resilience4j integrated via OpenFeign to implement Circuit Breakers, Retries, and Fallback methods, preventing downstream cascading failures.
+*   **Security:** Keycloak integration at the API Gateway layer to enforce OAuth2 / JWT authentication and Role-Based Access Control.
+*   **Data Access:** Spring Data JPA for database operations.
+*   **DevOps:** Containerization using Docker; local orchestration across multiple environments using Docker Compose.
 
 ---
 
-<div align="center">
-<sub>Based in Bengaluru, India · Open to opportunities</sub>
-</div>
+## 🚀 Getting Started (Local Development)
+
+### Prerequisites
+*   Java 21
+*   Maven
+*   Docker & Docker Compose
+
+### 1. Build the Microservices
+Before spinning up the containers, ensure all microservices are built and their Docker images are generated. Navigate to the root directory and run your Maven build command (e.g., using Jib or standard Dockerfiles configured in your `pom.xml`).
+
+### 2. Start the Infrastructure & Services
+The project uses Docker Compose to orchestrate Keycloak, Kafka, Redis, and all Spring Boot microservices. 
+
+Navigate to the default Docker Compose directory and start the cluster:
+```bash
+cd docker-compose/default
+docker-compose up -d
+```
+
+### 3. Important Local Endpoints
+Once the containers are successfully running, you can interact with the system via the following endpoints:
+
+*   **API Gateway:** `http://localhost:8072` *(All API traffic should be routed through here)*
+*   **Eureka Dashboard:** `http://localhost:8070`
+*   **Config Server:** `http://localhost:8071`
+*   **Keycloak Admin Console:** `http://localhost:7080`
+
+### 4. Authentication & API Testing
+The API Gateway enforces OAuth2 security. Direct calls to the domain services without a token will result in a `401 Unauthorized` error.
+
+1.  Access Keycloak at `http://localhost:7080` using your configured admin credentials.
+2.  Generate a JWT token for the configured client.
+3.  Include the token as a `Bearer Token` in the `Authorization` header of your HTTP requests.
+
+**Example Request:**
+```bash
+curl -X GET http://localhost:8072/accounts/api/fetch \
+  -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>"
+```
